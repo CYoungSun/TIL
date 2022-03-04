@@ -143,3 +143,41 @@ urlpatterns = [
   <p>{{ today|date:"Y년 m월 d일 (D) A h:i" }}</p>
 {% endblock %}
 ```
+### TMDB와 연계
+```py
+def recommendations(request):
+    BASE_URL = 'https://api.themoviedb.org/3'
+    path = '/movie/278/recommendations'
+    params = {
+        'api_key': '6ee28199be1bbcf8ca5e34de5bc25219',
+        'language': 'ko',
+    }
+
+    response = requests.get(BASE_URL + path, params=params).json()
+    results = response.get('results')
+    n = random.choice(range(len(results)))
+    context = {
+        'photo' : results[n]['poster_path'],
+        'title' : results[n]['title'],
+        'overview' : results[n]['overview'],
+        'id' : results[n]['id'],
+    }
+
+    return render(request, 'recommendations.html', context)
+```
+```html
+{% extends 'base.html' %}
+{% block content %}
+<article class="container-fluid pb-5">
+  <h1 class="text-center">쇼생크 탈출과 비슷한 영화 추천받기</h1>
+  <div class="card row mx-3 px-4" style="flex-direction : row;">
+    <img src="https://www.themoviedb.org/t/p/w300_and_h450_bestv2/{{ photo }}" class="col-12 col-md-3" alt="...">
+    <div class="card-body col-12 col-md-8">
+      <h5 class="card-title">{{ title }}</h5>
+      <p class="card-text">{{ overview }}</p>
+      <a href="https://www.themoviedb.org/movie/{{ id }}" class="card-link bg-primary text-decoration-none text-light btn">상세정보</a>
+    </div>
+  </div>
+</article>
+{% endblock  %}
+```
