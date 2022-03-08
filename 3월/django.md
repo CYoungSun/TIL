@@ -181,3 +181,124 @@ def recommendations(request):
 </article>
 {% endblock  %}
 ```
+# 03.08
+## model
+- 웹 애플리케이션의 데이터를 구조화하고 조작하기 위한 도구
+### Database의 기본 구조
+- 스키마
+  - 데이터베이스에서 자료의 구조, 표현방법, 관계등을 정의한 구조
+- 테이블
+  - 열 : 필드 or 속성
+  - 행 : 레코드 or 튜플
+
+### 명령어
+```
+select * from 광주3반
+pip freeze > requirements.txt
+pip install django-extensions
+netstat -nao |  findstr "port번호" (포트번호 찾기)
+taskkill /f /pid (cmd에서 해야함)
+python manage.py migrate
+python manage.py makemigrations (model이 변경되면)
+python manage.py sqlmigrate articles 0001
+----------------------------------
+pip install ipython
+python manage.py shell_plus
+Article.objects.all()
+article = Article()
+article.title = "first"
+article.content = "django"
+article.save()
+```
+SQLite
+vscode-icons
+### ORM
+- Object-Relational-Mapping
+- 장점
+  - SQL을 알지 못해도 DB조작 가능
+  - 객체 지향적 접근으로 높은 생산성
+- 단점
+  - ORM 만으로 완전한 서비스를 구현하기 어려운 경우가 있음
+- 현대 웹 프레임워크의 요즘은 웹 개발의 속도를 높이는 것
+- 우리는 DB를 객체로 조작하기위해 ORM을 사용한다.
+
+```
+django-extentions 설치
+settings.py 에 django_extentions 추가
+python manage.py migrate (migrations 폴더 생성될거임)
+models.py에 class생성 (models.Model 상속)
+python manage.py makemigrations (models가 변경되면)
+python manage.py migrate 
+```
+### create하는 방법 3가지
+```
+article = Article()
+article.title = "first"
+article.content = "django"
+
+article = Article(title="second" , content="django")
+
+Article.objects.create(ttile="third", content="django")
+```
+### Read하는 방법
+```
+Article.objects.all()
+Article.objects.get(title="first")
+Article.objects.filter(content="django")
+```
+
+## 입력 받은 데이터를 데이터베이스에 추가하는법
+```html
+<!-- new.html -->
+{% extends 'base.html' %}
+{% block content %}
+  <h1>NEW</h1>
+  <form action="{% url 'new' %}" method="POST">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title">
+    <label for="content">Content</label>
+    <input type="text" id="content" name="content">
+    <input type="submit">
+  </form>
+  <a href="{% url 'index' %}">back</a>
+{% endblock %}
+```
+```html
+<!-- article.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h1>INDEX</h1>
+<a href=" {% url 'new' %}">NEW</a>
+  {% if articles %}
+    {% for article in articles %}
+      <p>
+        제목 : {{ article.title }}
+      </p>
+      <p>
+        내용 : {{ article.content }}
+      </p>
+    {% endfor %}
+  {% endif %}
+{% endblock %}
+```
+```py
+from django.shortcuts import render
+from .models import Article
+from django.views.decorators.csrf import csrf_exempt
+# Create your views here.
+def index(request):
+    article = Article.objects.all()
+    context = {
+        'articles' : article
+    }
+    return render(request, 'article.html', context)
+
+@csrf_exemp
+def new(request):
+    if request.method == 'POST':
+        title = request.POST.get("title")
+        content = request.POST.get("content")
+        article = Article(title=title, content=content)
+        article.save()
+    return render(request, 'new.html')
+```
