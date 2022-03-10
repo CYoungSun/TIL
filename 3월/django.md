@@ -302,3 +302,65 @@ def new(request):
         article.save()
     return render(request, 'new.html')
 ```
+### admin 계정
+```
+python manage.py createsuperuser
+```
+```py
+#admin.py
+from django.contrib import admin
+from .models import Article
+
+class ArticleAdmin(admin.ModelAdmin):
+    list_display = ("pk", "title", "content", "created_at", "updated_at",)
+
+admin.site.register(Article, ArticleAdmin)
+# Register your models here.
+```
+# 03.10
+### delete and update
+```py
+article = Article.objects.get(title='first')
+artcicle.title = 'second'
+article.content = 'django'
+article.delete()
+```
+### 디테일 페이지
+```py
+def detail(request, pk):
+    article = Article.objects.get(pk=pk)
+    context = {
+        'article' : article,
+    }
+    return render(request, 'article/detail.html', context)
+```
+### csrf token과 pk값 넘겨주기
+```html
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Update</h1>
+  <form action="{% url 'article:update' article.pk %}" method="POST"> 
+    {% csrf_token %} 
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" value="{{article.title}}">
+    <label for="content">Content:</label>
+    <textarea name="content" id="content" cols="30" rows="10">{{article.content}}</textarea>
+    <input type="submit" value="제출">
+  </form>
+  <a href="{% url 'article:index' %}">뒤로가기</a>
+{% endblock content %}
+```
+```py
+def update(request, pk):
+    article = Article.objects.get(pk=pk)
+    if request.method == 'POST':
+        article.title = request.POST.get('title')
+        article.content = request.POST.get('content')
+        article.save()
+        return redirect('article:detail', article.pk)
+    context = {
+        'article' : article
+    }
+
+    return render(request, 'article/update.html', context)
+```
