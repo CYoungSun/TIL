@@ -1,4 +1,4 @@
-# model form
+## model form
 pip install django-bootstrap-v5
 - 여러 목록중 하나를 고르게 하는 필드를 만들고 싶으면 아래와 같이 만들면 된다.
 ```py
@@ -36,4 +36,23 @@ release_date = forms.DateTimeField(
                 'type' : 'date',
             }
         )
+```
+## Login
+```py
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login as auth_login
+
+def login(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            auth_login(request, form.get_user())
+            return redirect('articles:index')
+    else:
+        form = AuthenticationForm()
+    context = {
+        'form' : form,
+    }
+    return render(request, 'accounts/login.html', context)
 ```
