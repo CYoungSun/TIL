@@ -1,4 +1,4 @@
-# 03.14
+# SQL
 ## SQL 시작
 ```
 sqlite3 tutorial.sqlite3
@@ -29,9 +29,13 @@ DISTINCT # 조회결과에서 중복된 행을 제거
 WHERE # 특별한 조건
 ```
 ## DELETE
+```
+DELETE from classmates where id = 2;
+```
 ### AUTOINCREMENT
 CREATE 할떄 설정해주면 된다.
 
 ## UPDATE
 ```
 UPDATE 테이블이름 SET 컬럼1=값1, 컬럽2=값2 WHERE 조건;
+```
