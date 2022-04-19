@@ -4,3 +4,4 @@ for i in S:
     n = ord(i)-ord('a')
     bucket[n] += 1
 print(*bucket)
+#
