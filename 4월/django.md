@@ -83,3 +83,18 @@ class Comment(models.Model):
     def __str__(self):
         return self.content
 ```
+
+
+## DRF
+- @api_veiw 안에 넣은 값들로 버튼이 생긴다.
+- json파일에는 " " 을 사용해야 한다.
+- 외래키를 저장할때는 serializers.save(artist=artist) 처럼 save할때 외래키를 지정해주면 된다.
+- 외래키를 사용하는 Model의 serializer를 만들때 class Meta에 read_only_fields를 추가해줘야 create할때 필요한 값이라고 오류가 안나온다.
+```py
+class MusicSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Music
+        fields = ('id', 'title', 'artist',)
+        read_only_fields = ('artist',)
+```
