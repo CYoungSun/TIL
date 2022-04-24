@@ -31,11 +31,11 @@ for _ in range(T):
         que.pop()
   else:
     if reverse ==0:
-      que = list(que)
-      a = ",".join(que)
-      print('['+a+']')
+        que = list(que)
+        a = ",".join(que)
+        print('['+a+']')
     else:
-      que.reverse()
-      que = list(que)
-      a = ",".join(que)
-      print('['+a+']')
+        que.reverse()
+        que = list(que)
+        a = ",".join(que)
+        print('['+a+']')
