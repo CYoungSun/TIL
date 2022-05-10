@@ -18,8 +18,11 @@ vue --version
 vue create my-first-app
 cd my-first-app
 npm run serve
+npm i
 ```
 index.html -> App.vue -> components/HelloWorld.Vue
-#### babel
+### babel
 바벨 = 버전 다운그레이드 도구
 Webpack = 여러 파일을 번들링 시켜 하나로 묶는다.
+
+## Props, Emits
