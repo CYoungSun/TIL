@@ -19,6 +19,7 @@ vue create my-first-app
 cd my-first-app
 npm run serve
 npm i
+npm i vuex-persistedstate
 ```
 index.html -> App.vue -> components/HelloWorld.Vue
 ### babel
